@@ -16,7 +16,7 @@ class CloudflareParser(BaseParser):
         filtered_jobs = self.filter_jobs(all_jobs, keywords)
 
         # Send HTML to BeautifulSoup
-        jobs = self.parse_cloudflare_jobs(filtered_jobs)
+        jobs = self.parse_jobs(filtered_jobs)
 
         return jobs
 
@@ -34,7 +34,7 @@ class CloudflareParser(BaseParser):
                     break
         return filtered
 
-    def parse_cloudflare_jobs(self, filtered_jobs) -> list:
+    def parse_jobs(self, filtered_jobs) -> list:
         jobs = []
 
         print(f"Found {len(filtered_jobs)} jobs.\n")

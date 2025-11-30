@@ -19,11 +19,11 @@ class GoogleParser(BaseParser):
         r = requests.get(url, headers=HEADERS, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")
 
-        jobs = self.parse_google_jobs(soup)
+        jobs = self.parse_jobs(soup)
 
         return jobs
 
-    def parse_google_jobs(self, soup) -> list:
+    def parse_jobs(self, soup) -> list:
         jobs = []
 
         # Google Careers typically lists jobs in <li> items with class 'lLd3Je'

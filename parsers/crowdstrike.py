@@ -7,12 +7,12 @@ import time
 import html
 
 
-class TrendMicroParser(BaseParser):
-    name = "TrendMicro"
+class CrowdstrikeParser(BaseParser):
+    name = "Crowdstrike"
 
     def build_urls(self, keywords):
         urls = []
-        base = "https://trendmicro.wd3.myworkdayjobs.com/External?q="
+        base = "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers?q="
         for kw in keywords:
             urls.append(base + kw.replace(" ", "+"))
         return urls
@@ -63,7 +63,7 @@ class TrendMicroParser(BaseParser):
             # --- Link ---
             # Workday links are relative, so we prepend the base domain found in the file
             relative_link = title_tag.get('href')
-            link = f"https://trendmicro.wd3.myworkdayjobs.com{relative_link}"
+            link = f"https://crowdstrike.wd5.myworkdayjobs.com{relative_link}"
 
             location = self.parse_locations(title_tag)
 

@@ -10,6 +10,9 @@ from parsers.microsoft import MicrosoftParser
 from parsers.brave import BraveParser
 from parsers.censys import CensysParser
 from parsers.trend_micro import TrendMicroParser
+from parsers.meta import MetaParser
+from parsers.crowdstrike import CrowdstrikeParser
+from parsers.paypal import PayPalParser
 
 def load_urls():
     with open("urls.txt") as f:
@@ -27,6 +30,9 @@ def main(keywords):
         BraveParser(),
         CensysParser(),
         TrendMicroParser(),
+        MetaParser(),
+        CrowdstrikeParser(),
+        PayPalParser(),
     ]
 
     new_jobs = crawl(parsers, keywords)

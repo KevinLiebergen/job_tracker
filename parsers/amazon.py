@@ -36,12 +36,12 @@ class AmazonParser(BaseParser):
         # Send HTML to BeautifulSoup
         soup = BeautifulSoup(rendered_html, 'html.parser')
 
-        jobs = self.get_amazon_jobs_rendered(soup)
+        jobs = self.parse_jobs(soup)
 
         return jobs
 
 
-    def get_amazon_jobs_rendered(self, soup) -> list:
+    def parse_jobs(self, soup) -> list:
 
         jobs_data = []
 
