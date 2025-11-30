@@ -1,2 +1,5 @@
-.idea/
 .env
+jobs.db
+
+.idea/
+__pycache__/
