@@ -13,6 +13,7 @@ from parsers.trend_micro import TrendMicroParser
 from parsers.meta import MetaParser
 from parsers.crowdstrike import CrowdstrikeParser
 from parsers.paypal import PayPalParser
+from parsers.palo_alto import PaloAltoParser
 
 def load_urls():
     with open("urls.txt") as f:
@@ -33,6 +34,7 @@ def main(keywords):
         MetaParser(),
         CrowdstrikeParser(),
         PayPalParser(),
+        PaloAltoParser(),
     ]
 
     new_jobs = crawl(parsers, keywords)
@@ -48,7 +50,7 @@ if __name__ == "__main__":
     parser.add_argument("--keywords","-k",
                         nargs="+",  # Allows passing keywords splited by space
                         help="Keyword list to search",
-                        default=["security", "internship"]
+                        default=["security", "research intern"]
                         )
     args = parser.parse_args()
     main(args.keywords)

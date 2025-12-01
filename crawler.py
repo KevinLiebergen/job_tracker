@@ -33,6 +33,7 @@ def build_urls(url_config, keywords=None):
 
 def crawl(parsers, keywords):
     new_jobs = []
+    jobs_extended = []
 
     for parser_obj in parsers:
         print(f"\n📌 Running parser: {parser_obj.name}")
@@ -47,13 +48,15 @@ def crawl(parsers, keywords):
             # Parse the HTML
             try:
                 jobs = parser_obj.parse(url, keywords)
+                jobs_extended.extend(jobs)
+
             except Exception as e:
                 print(f"    ❌ Parsing error in {parser_obj.name}: {e}")
                 continue
 
             print(f"    → Parsed {len(jobs)} jobs")
 
-        for job in jobs:
+        for job in jobs_extended:
             job_id = hash_job(job["title"], job["link"])
 
             if not job_exists(job_id):

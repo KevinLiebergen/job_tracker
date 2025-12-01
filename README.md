@@ -55,16 +55,23 @@ DB_PATH=data/jobs.db
 The results are saved into a SQLite 3 database (data/jobs.db). 
 The database consists of a single table named 'jobs' with the following schema:
 ```
-+------------+-----------+-----------------------------------------+
-| COLUMN     | TYPE      | NOTES                                   |
-+------------+-----------+-----------------------------------------+
-| id         | TEXT      | PRIMARY KEY, Unique                     |
-| title      | TEXT      | e.g. "Data Analyst"                     |
-| company    | TEXT      | e.g. "Google"                           |
-| location   | TEXT      | e.g. "New York, NY"                     |
-| link       | TEXT      | Direct Job URL                          |
-| date_added | TEXT      | e.g. 2025/11/28                         |
-+------------+-----------+-----------------------------------------+
++------------------------------------------------------+
+|                     TABLE: jobs                      |
++----------------+--------------+----------------------+
+|  COLUMN NAME   |  DATA TYPE   |       NOTES          |
++----------------+--------------+----------------------+
+| 🔑 id          |     TEXT     |  PRIMARY KEY, Unique |
++----------------+--------------+----------------------+
+|    title       |     TEXT     |  e.g. "Data Analyst" |
++----------------+--------------+----------------------+
+|    company     |     TEXT     |  e.g. "Google"       |
++----------------+--------------+----------------------+
+|    location    |     TEXT     |  e.g. "New York, NY" |
++----------------+--------------+----------------------+
+|    link        |     TEXT     |  Direct Job URL      |
++----------------+--------------+----------------------+
+|    date_added  |     TEXT     |  e.g. 2025/11/28     |
++----------------+--------------+----------------------+
 ```
 
 ## Config
