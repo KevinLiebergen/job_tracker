@@ -1,6 +1,6 @@
 # Job Tracker
 
-A Python-based tool to track job listings from various company career pages, save them to a database, and send notifications via Telegram.
+A Python-based tool to track big-tech job listings from various company career pages, save them to a database, and send notifications via Telegram.
 
 ## Installation
 
