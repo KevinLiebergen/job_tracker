@@ -4,7 +4,6 @@ A Python-based tool to track big-tech job listings from various company career p
 
 ## Installation
 
-
 To set up the environment, run the following commands:
 
 1. Create the environment:
@@ -19,6 +18,44 @@ $ conda activate job_tracker
 ```bash
 $ pip install -r requirements.txt 
 ```
+
+## Saving to database
+
+The results are saved into a SQLite 3 database (`data/jobs.db`), 
+to check if the job found is new or not. 
+The database consists of a single table named `jobs` with the following schema:
+```
++------------------------------------------------------+
+|                     TABLE: jobs                      |
++----------------+--------------+----------------------+
+|  COLUMN NAME   |  DATA TYPE   |       NOTES          |
++----------------+--------------+----------------------+
+| 🔑 id          |     TEXT     |  PRIMARY KEY, Unique |
++----------------+--------------+----------------------+
+|    title       |     TEXT     |  e.g. "Data Analyst" |
++----------------+--------------+----------------------+
+|    company     |     TEXT     |  e.g. "Google"       |
++----------------+--------------+----------------------+
+|    location    |     TEXT     |  e.g. "New York, NY" |
++----------------+--------------+----------------------+
+|    link        |     TEXT     |  Direct Job URL      |
++----------------+--------------+----------------------+
+|    date_added  |     TEXT     |  e.g. 2025/11/28     |
++----------------+--------------+----------------------+
+```
+
+
+## Telegram Notification
+
+To enable Telegram notifications, create a `.env` file in the root directory with your telegram credentials (telegram token and telegram chat id) 
+and configuration:
+```
+TELEGRAM_TOKEN=000000000:AAAAAAAAAA-BBBBBBBBBBBBBBBBBBBBBBBB
+TELEGRAM_CHAT_ID=-1234567890
+DB_PATH=data/jobs.db
+```
+
+![Telegram notification](assets/notification.png)
 
 ## Running
 
@@ -40,39 +77,6 @@ To run the tracker automatically every day at 9:00 AM, add the following line to
 0 9 * * * /path/to/your/conda/environment/python3 /path/to/job_tracker/main.py -k security internship
 ```
 
-## Notification
-
-To enable Telegram notifications, create a .env file in the root directory with your credentials and configuration:
-```
-TELEGRAM_TOKEN=000000000:AAAAAAAAAA-BBBBBBBBBBBBBBBBBBBBBBBB
-TELEGRAM_CHAT_ID=-1234567890
-DB_PATH=data/jobs.db
-```
-
-## Saving
-
-
-The results are saved into a SQLite 3 database (data/jobs.db). 
-The database consists of a single table named 'jobs' with the following schema:
-```
-+------------------------------------------------------+
-|                     TABLE: jobs                      |
-+----------------+--------------+----------------------+
-|  COLUMN NAME   |  DATA TYPE   |       NOTES          |
-+----------------+--------------+----------------------+
-| 🔑 id          |     TEXT     |  PRIMARY KEY, Unique |
-+----------------+--------------+----------------------+
-|    title       |     TEXT     |  e.g. "Data Analyst" |
-+----------------+--------------+----------------------+
-|    company     |     TEXT     |  e.g. "Google"       |
-+----------------+--------------+----------------------+
-|    location    |     TEXT     |  e.g. "New York, NY" |
-+----------------+--------------+----------------------+
-|    link        |     TEXT     |  Direct Job URL      |
-+----------------+--------------+----------------------+
-|    date_added  |     TEXT     |  e.g. 2025/11/28     |
-+----------------+--------------+----------------------+
-```
 
 ## Config
 
