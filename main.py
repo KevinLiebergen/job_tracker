@@ -50,7 +50,12 @@ if __name__ == "__main__":
     parser.add_argument("--keywords","-k",
                         nargs="+",  # Allows passing keywords splited by space
                         help="Keyword list to search",
-                        default=["security", "research intern"]
+                        default=["cybercrime",
+                                 "security",
+                                 "research intern",
+                                 "internship",
+                                 "PhD",
+                                 "Ph.D."]
                         )
     args = parser.parse_args()
     main(args.keywords)
