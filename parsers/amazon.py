@@ -60,7 +60,7 @@ class AmazonParser(BaseParser):
 
                 jobs_data.append({
                     "title": title,
-                    "company": "Amazon",
+                    "company": self.name,
                     "location": location,
                     "link": link
                 })

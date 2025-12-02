@@ -89,5 +89,5 @@ class MicrosoftParser(BaseParser):
         href = a["href"]
         # Convert relative → absolute
         if href.startswith("/"):
-            return "https://careers.microsoft.com" + href
+            return "https://apply.careers.microsoft.com" + href
         return href
