@@ -65,7 +65,7 @@ class AmazonParser(BaseParser):
                     "link": link
                 })
             except AttributeError:
-                continue
+                print(f"Error parsing job: {card}")
 
         return jobs_data
 

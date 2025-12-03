@@ -15,6 +15,8 @@ from parsers.crowdstrike import CrowdstrikeParser
 from parsers.paypal import PayPalParser
 from parsers.palo_alto import PaloAltoParser
 from parsers.gen import GenParser
+from parsers.netflix import NetflixParser
+from parsers.spotify import SpotifyParser
 
 def load_urls():
     with open("urls.txt") as f:
@@ -37,6 +39,8 @@ def main(keywords):
         PayPalParser(),
         PaloAltoParser(),
         GenParser(),
+        NetflixParser(),
+        SpotifyParser(),
     ]
 
     new_jobs = crawl(parsers, keywords)

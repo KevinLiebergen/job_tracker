@@ -7,12 +7,12 @@ import time
 import html
 
 
-class MicrosoftParser(BaseParser):
-    name = "Microsoft"
+class SpotifyParser(BaseParser):
+    name = "Spotify"
 
     def build_urls(self, keywords):
         urls = []
-        base = "https://apply.careers.microsoft.com/careers?domain=microsoft.com&start=0&pid=1970393556621058&sort_by=match&query="
+        base = "https://www.lifeatspotify.com/jobs?q="
         for kw in keywords:
             urls.append(base + kw.replace(" ", "+"))
         return urls
@@ -44,12 +44,13 @@ class MicrosoftParser(BaseParser):
     def parse_jobs(self, soup) -> list:
 
         jobs_data = []
-        job_cards = soup.select('[data-test-id="job-listing"]')
+
+        # In Amazon, positions used to be under divs with class 'job-tile'
+        job_cards = soup.find_all('div', class_='entry_container__eT9IU')
 
         for card in job_cards:
             try:
-                title_elem = card.select_one(".title-1aNJK")
-                title = title_elem.get_text(strip=True) if title_elem else "N/A"
+                title = self.parse_title(card)
 
                 # Location in a list or simple paragraph
                 location = self.parse_locations(card)
@@ -65,29 +66,40 @@ class MicrosoftParser(BaseParser):
                 })
             except AttributeError:
                 print(f"Error parsing job: {card}")
+                continue
 
         return jobs_data
 
+    @staticmethod
+    def parse_title(card):
+        # --- Extract Title ---
+        # Title is in an <h2> tag with class "entry_title__Q0z3u"
+        title_tag = card.find('h2', class_='entry_title__Q0z3u')
+        title = title_tag.get_text(strip=True) if title_tag else "N/A"
+        return title
+
 
     @staticmethod
-    def parse_locations(job_card):
-        country_elem = job_card.select_one('.fieldValue-3kEar')
-        if country_elem:
-            full_country = country_elem.get_text(strip=True)
-
-        return full_country or "N/A"
+    def parse_locations(card):
+        # --- Extract Location ---
+        # Locations appear twice (mobile/desktop). We target the desktop version
+        # which has the class "is-hidden-mobile" to avoid duplicates.
+        location_tag = card.find('p', class_='is-hidden-mobile')
+        if location_tag:
+            location = location_tag.get_text(strip=True)
+        else:
+            # Fallback if the desktop tag isn't found
+            location = "N/A"
+        return location
 
     @staticmethod
-    def parse_link(job_card):
-        """
-        Extracts the absolute URL of the job offer.
-        """
-        a = job_card.find("a", href=True)
-        if not a:
-            return "N/A"
-
-        href = a["href"]
-        # Convert relative → absolute
-        if href.startswith("/"):
-            return "https://apply.careers.microsoft.com" + href
-        return href
+    def parse_link(card):
+        # --- Extract Link ---
+        # The URL isn't in an href. It's in the 'data-info' attribute (the slug).
+        # We must prepend the base URL manually.
+        slug = card.get('data-info')
+        if slug:
+            link = f"https://www.lifeatspotify.com/jobs/{slug}"
+        else:
+            link = "N/A"
+        return link
