@@ -1,14 +1,5 @@
 import hashlib
-from parsers import google, amazon, cloudflare
 from database import job_exists, save_job
-import time
-
-# Dictionary to access parser by name
-#PARSERS = {
-#    "google": google.parse,
-#    "amazon": amazon.parse,
-#    "cloudflare": cloudflare.parse,
-#}
 
 def hash_job(title, link):
     return hashlib.sha256((title + link).encode()).hexdigest()

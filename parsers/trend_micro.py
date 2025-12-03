@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import time
-import html
 
 
 class TrendMicroParser(BaseParser):
@@ -46,8 +45,6 @@ class TrendMicroParser(BaseParser):
         jobs_data = []
 
         title_links = soup.find_all('a', attrs={'data-automation-id': 'jobTitle'})
-
-        print(f"Found {len(title_links)} job cards.\n")
 
         for title_tag in title_links:
             # We can extract most data relative to the title tag

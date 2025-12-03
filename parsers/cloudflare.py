@@ -3,15 +3,19 @@ import requests
 
 class CloudflareParser(BaseParser):
     name = "Cloudflare"
-
+    # Defined inside the class
+    SPECIFIC_KEYWORDS = [
+        "Research Engineer Intern",
+    ]
 
     def build_urls(self, keywords):
         return ["https://boards-api.greenhouse.io/v1/boards/cloudflare/jobs/"]
 
-    def parse(self, url: str, keywords: list) -> list:
+    def parse(self, url: str, base_keywords: list) -> list:
 
         response = requests.get(url)
         all_jobs = response.json().get('jobs', [])
+        keywords = list(set(base_keywords + self.SPECIFIC_KEYWORDS))
 
         filtered_jobs = self.filter_jobs(all_jobs, keywords)
 

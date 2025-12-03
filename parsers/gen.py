@@ -6,12 +6,12 @@ from bs4 import BeautifulSoup
 import time
 
 
-class CrowdstrikeParser(BaseParser):
-    name = "Crowdstrike"
+class GenParser(BaseParser):
+    name = "Gen"
 
     def build_urls(self, keywords):
         urls = []
-        base = "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers?q="
+        base = "https://gen.wd1.myworkdayjobs.com/en-US/careers?q="
         for kw in keywords:
             urls.append(base + kw.replace(" ", "+"))
         return urls
@@ -60,7 +60,7 @@ class CrowdstrikeParser(BaseParser):
             # --- Link ---
             # Workday links are relative, so we prepend the base domain found in the file
             relative_link = title_tag.get('href')
-            link = f"https://crowdstrike.wd5.myworkdayjobs.com{relative_link}"
+            link = f"https://gen.wd5.myworkdayjobs.com{relative_link}"
 
             location = self.parse_locations(title_tag)
 

@@ -14,6 +14,7 @@ from parsers.meta import MetaParser
 from parsers.crowdstrike import CrowdstrikeParser
 from parsers.paypal import PayPalParser
 from parsers.palo_alto import PaloAltoParser
+from parsers.gen import GenParser
 
 def load_urls():
     with open("urls.txt") as f:
@@ -35,6 +36,7 @@ def main(keywords):
         CrowdstrikeParser(),
         PayPalParser(),
         PaloAltoParser(),
+        GenParser(),
     ]
 
     new_jobs = crawl(parsers, keywords)
@@ -51,7 +53,7 @@ if __name__ == "__main__":
                         nargs="+",  # Allows passing keywords splited by space
                         help="Keyword list to search",
                         default=["cybercrime",
-                                 "security",
+                                 "security research",
                                  "research intern",
                                  "internship",
                                  "PhD",
