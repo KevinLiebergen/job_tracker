@@ -8,15 +8,15 @@ To set up the environment, run the following commands:
 
 1. Create the environment:
 ```bash
-$ conda create --name job_tracker python=3.12 
+conda create --name job_tracker python=3.12 
 ```
 2. Activate the environment:
 ```bash
-$ conda activate job_tracker
+conda activate job_tracker
 ```
 3. Install dependencies:
 ```bash
-$ pip install -r requirements.txt 
+pip install -r requirements.txt 
 ```
 
 ## Saving to database
@@ -63,18 +63,18 @@ You can run the script using default keywords defined in the code, or pass speci
 
 Basic usage:
 ```bash
-$ python main.py
+python main.py
 ```
 Run with specific keywords:
 ```bash
-$ python main.py -k security internship
+python main.py -k security internship
 ```
 
 ## Automating with Cron
 
 To run the tracker automatically every day at 9:00 AM, add the following line to your crontab:
 ```
-0 9 * * * /path/to/your/conda/environment/python3 /path/to/job_tracker/main.py -k security internship
+0 8,20 * * * /path/to/your/conda/environment/python3 /path/to/job_tracker/main.py
 ```
 
 
@@ -83,7 +83,9 @@ To run the tracker automatically every day at 9:00 AM, add the following line to
 
 To track a new company:
 
-1. Create a new python file under the 'parsers/' directory (e.g., parsers/new_company.py).
+1. Create a new python file under the `parsers/` directory (e.g., `parsers/new_company.py`).
 2. Implement a class that contains at least these two methods:
-    * build_urls(): Returns the list of URLs to scrape.
-    * parse(): Extracts the job data (title, location, link) from the HTML or API response.
+    * `build_urls()`: Returns the list of URLs to scrape.
+    * `parse()`: Extracts the job data (title, location, link) from the HTML or API response.
+3. Add it to the list of parsers in `main.py`
+4. Stay alert for new positions!
