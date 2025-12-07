@@ -1,8 +1,8 @@
-# Job Tracker
+# 🚀 Job Tracker
 
 A Python-based tool to track big-tech job listings from various company career pages, save them to a database, and send notifications via Telegram.
 
-## Installation
+## 🛠️ Installation
 
 To set up the environment, run the following commands:
 
@@ -19,7 +19,7 @@ conda activate job_tracker
 pip install -r requirements.txt 
 ```
 
-## Saving to database
+## 💾 Saving to database
 
 The results are saved into a SQLite 3 database (`data/jobs.db`), 
 to check if the job found is new or not. 
@@ -45,7 +45,7 @@ The database consists of a single table named `jobs` with the following schema:
 ```
 
 
-## Telegram Notification
+## 🔔 Telegram Notification
 
 To enable Telegram notifications, create a `.env` file in the root directory with your telegram credentials (telegram token and telegram chat id) 
 and configuration:
@@ -57,7 +57,7 @@ DB_PATH=data/jobs.db
 
 ![Telegram notification](assets/notification.png)
 
-## Running
+## ▶️ Running
 
 You can run the script using default keywords defined in the code, or pass specific keywords as arguments.
 
@@ -70,7 +70,7 @@ Run with specific keywords:
 python main.py -k security internship
 ```
 
-## Automating with Cron
+## 🕰️ Automating with Cron
 
 To run the tracker automatically every day at 9:00 AM, add the following line to your crontab:
 ```
@@ -78,7 +78,7 @@ To run the tracker automatically every day at 9:00 AM, add the following line to
 ```
 
 
-## Config
+## ⚙️ Config
 
 
 To track a new company:
