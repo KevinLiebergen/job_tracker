@@ -23,7 +23,7 @@ def load_urls():
         return [line.strip() for line in f if line.strip()]
 
 
-def main(keywords):
+def main(keywords, exclude=None):
     init_db()
 
     parsers = [
@@ -43,7 +43,7 @@ def main(keywords):
         SpotifyParser(),
     ]
 
-    new_jobs = crawl(parsers, keywords)
+    new_jobs = crawl(parsers, keywords, exclude)
 
     if new_jobs:
         print(f"\n📨 Sending {len(new_jobs)} new jobs to Telegram…")
@@ -63,5 +63,9 @@ if __name__ == "__main__":
                                  "PhD",
                                  "Ph.D."]
                         )
+    parser.add_argument("--exclude", "-e",
+                        nargs="+",
+                        help="Keywords to exclude from results",
+                        default=[])
     args = parser.parse_args()
-    main(args.keywords)
+    main(args.keywords, args.exclude)
