@@ -17,6 +17,7 @@ from parsers.palo_alto import PaloAltoParser
 from parsers.gen import GenParser
 from parsers.netflix import NetflixParser
 from parsers.spotify import SpotifyParser
+from parsers.cisco import CiscoParser
 
 def load_urls():
     with open("urls.txt") as f:
@@ -41,6 +42,7 @@ def main(keywords, exclude=None):
         GenParser(),
         NetflixParser(),
         SpotifyParser(),
+        CiscoParser(),
     ]
 
     new_jobs = crawl(parsers, keywords, exclude)
