@@ -71,7 +71,8 @@ class CiscoParser(BaseParser):
                 for job in parsed_jobs:
                     title = job.get('title', 'N/A')
                     location = job.get('location', 'N/A')
-                    link = job.get('applyUrl', 'N/A')
+                    apply_link = job.get('applyUrl', 'N/A')
+                    link = apply_link.removesuffix('/apply')
 
                     jobs.append({
                         "title": title,
