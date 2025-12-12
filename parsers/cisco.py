@@ -10,11 +10,14 @@ import re
 
 class CiscoParser(BaseParser):
     name = "Cisco"
+    SPECIFIC_KEYWORDS = ["Talos"]
 
     def build_urls(self, keywords):
+        # Merge with specific keywords
+        combined_keywords = list(set(keywords + self.SPECIFIC_KEYWORDS))
         urls = []
         base = "https://careers.cisco.com/global/en/search-results?keywords="
-        for kw in keywords:
+        for kw in combined_keywords:
             urls.append(base + kw.replace(" ", "+"))
         return urls
 

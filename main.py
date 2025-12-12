@@ -19,10 +19,13 @@ from parsers.gen import GenParser
 from parsers.netflix import NetflixParser
 from parsers.spotify import SpotifyParser
 from parsers.cisco import CiscoParser
+from parsers.anthropic import AnthropicParser
+from parsers.datadog import DatadogParser
 
 def load_urls():
     with open("urls.txt") as f:
         return [line.strip() for line in f if line.strip()]
+
 
 
 def main(keywords, exclude=None):
@@ -45,6 +48,8 @@ def main(keywords, exclude=None):
         NetflixParser(),
         SpotifyParser(),
         CiscoParser(),
+        AnthropicParser(),
+        DatadogParser(),
     ]
 
     new_jobs = crawl(parsers, keywords, exclude)
@@ -64,12 +69,15 @@ if __name__ == "__main__":
                                  "research intern",
                                  "internship",
                                  "PhD",
-                                 "Ph.D.",
                                  "cybercrime"]
                         )
     parser.add_argument("--exclude", "-e",
                         nargs="+",
                         help="Keywords to exclude from results",
-                        default=[])
+                        default=["Senior",
+                                 "Sr.",
+                                 "Director",
+                                 "Manager",
+                                 "Coordinator"])
     args = parser.parse_args()
     main(args.keywords, args.exclude)
