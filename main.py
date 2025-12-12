@@ -4,6 +4,7 @@ from notifier import send_new_jobs
 from database import init_db
 
 from parsers.google import GoogleParser
+from parsers.google_deep_mind import GoogleDeepMindParser
 from parsers.amazon import AmazonParser
 from parsers.cloudflare import CloudflareParser
 from parsers.microsoft import MicrosoftParser
@@ -29,6 +30,7 @@ def main(keywords, exclude=None):
 
     parsers = [
         GoogleParser(),
+        GoogleDeepMindParser(),
         AmazonParser(),
         CloudflareParser(),
         MicrosoftParser(),
@@ -58,12 +60,12 @@ if __name__ == "__main__":
     parser.add_argument("--keywords","-k",
                         nargs="+",  # Allows passing keywords splited by space
                         help="Keyword list to search",
-                        default=["cybercrime",
-                                 "security research",
+                        default=["security research",
                                  "research intern",
                                  "internship",
                                  "PhD",
-                                 "Ph.D."]
+                                 "Ph.D.",
+                                 "cybercrime"]
                         )
     parser.add_argument("--exclude", "-e",
                         nargs="+",
