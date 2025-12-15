@@ -1,7 +1,7 @@
 import argparse
-from crawler import crawl
-from notifier import send_new_jobs
-from database import init_db
+from src.crawler import crawl
+from src.notifier import send_new_jobs
+from src.database import init_db
 
 from parsers.google import GoogleParser
 from parsers.google_deep_mind import GoogleDeepMindParser
@@ -21,11 +21,6 @@ from parsers.spotify import SpotifyParser
 from parsers.cisco import CiscoParser
 from parsers.anthropic import AnthropicParser
 from parsers.datadog import DatadogParser
-
-def load_urls():
-    with open("urls.txt") as f:
-        return [line.strip() for line in f if line.strip()]
-
 
 
 def main(keywords, exclude=None):

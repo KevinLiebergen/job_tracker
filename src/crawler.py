@@ -1,5 +1,5 @@
 import hashlib
-from database import job_exists, save_job
+from .database import job_exists, save_job
 
 def hash_job(title, link):
     return hashlib.sha256((title + link).encode()).hexdigest()
