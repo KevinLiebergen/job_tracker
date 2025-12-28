@@ -37,7 +37,7 @@ class CensysParser(BaseParser):
     def parse_jobs(self, filtered_jobs) -> list:
         jobs = []
 
-        print(f"Found {len(filtered_jobs)} jobs.\n")
+
 
         for job in filtered_jobs:
             title = job.get('title')

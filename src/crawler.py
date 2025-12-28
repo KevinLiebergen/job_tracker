@@ -1,5 +1,8 @@
 import hashlib
+import logging
 from .database import job_exists, save_job
+
+logger = logging.getLogger(__name__)
 
 def hash_job(title, link):
     return hashlib.sha256((title + link).encode()).hexdigest()
@@ -27,14 +30,14 @@ def crawl(parsers, keywords, exclude=None):
     jobs_extended = []
 
     for parser_obj in parsers:
-        print(f"\n📌 Running parser: {parser_obj.name}")
+        logger.info(f"📌 Running parser: {parser_obj.name}")
 
         # Each parser knows how to build the correct URL(s)
         urls = parser_obj.build_urls(keywords)
-        print(f"  → URLs to visit: {urls}")
+        logger.info(f"  → URLs to visit: {urls}")
 
         for url in urls:
-            print(f"    → Visiting: {url}")
+            logger.info(f"    → Visiting: {url}")
 
             # Parse the HTML
             try:
@@ -44,10 +47,10 @@ def crawl(parsers, keywords, exclude=None):
                 jobs_extended.extend(jobs)
 
             except Exception as e:
-                print(f"    ❌ Parsing error in {parser_obj.name}: {e}")
+                logger.error(f"    ❌ Parsing error in {parser_obj.name}: {e}")
                 continue
 
-            print(f"    → Parsed {len(jobs)} jobs")
+            logger.info(f"    → Parsed {len(jobs)} jobs\n")
 
         for job in jobs_extended:
             job_id = hash_job(job["title"], job["link"])

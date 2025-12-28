@@ -1,4 +1,9 @@
 import argparse
+import os
+
+# Silence webdriver_manager logs
+os.environ['WDM_LOG'] = '0'
+
 from src.crawler import crawl
 from src.notifier import send_new_jobs
 from src.database import init_db
@@ -23,8 +28,21 @@ from parsers.anthropic import AnthropicParser
 from parsers.datadog import DatadogParser
 
 
+import logging
+
 def main(keywords, exclude=None):
     init_db()
+
+    # Configure logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    logger = logging.getLogger(__name__)
+
+    # Silence httpx logger
+    logging.getLogger("httpx").setLevel(logging.WARNING)
 
     parsers = [
         GoogleParser(),
@@ -50,10 +68,10 @@ def main(keywords, exclude=None):
     new_jobs = crawl(parsers, keywords, exclude)
 
     if new_jobs:
-        print(f"\n📨 Sending {len(new_jobs)} new jobs to Telegram…")
+        logger.info(f"📨 Sending {len(new_jobs)} new jobs to Telegram…")
         send_new_jobs(new_jobs)
     else:
-        print("\n✔ No new jobs today.")
+        logger.info("✔ No new jobs today.\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Job tracker script")
