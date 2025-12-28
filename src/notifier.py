@@ -19,6 +19,10 @@ def format_job_message(job):
         f"🔗 [Apply Here]({job['link']})\n"
     )
 
+def send_error(parser_name, error_message):
+    message = f"⚠️ *Parser Error* ⚠️\n\n⚙️ *Parser:* {parser_name}\n❌ *Error:* `{error_message}`"
+    asyncio.run(send_telegram_async(message))
+
 async def send_telegram_async(message):
     bot = Bot(token=TELEGRAM_TOKEN)
     await bot.send_message(chat_id=TELEGRAM_CHAT_ID,

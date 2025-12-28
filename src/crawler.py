@@ -48,6 +48,8 @@ def crawl(parsers, keywords, exclude=None):
 
             except Exception as e:
                 logger.error(f"    ❌ Parsing error in {parser_obj.name}: {e}")
+                from .notifier import send_error
+                send_error(parser_obj.name, str(e))
                 continue
 
             logger.info(f"    → Parsed {len(jobs)} jobs\n")
