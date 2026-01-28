@@ -45,3 +45,17 @@ def save_job(job_id, job):
     ))
     conn.commit()
     conn.close()
+
+
+def get_latest_jobs(limit=10):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("""
+        SELECT title, company, location, link, date_added 
+        FROM jobs 
+        ORDER BY rowid DESC 
+        LIMIT ?
+    """, (limit,))
+    results = c.fetchall()
+    conn.close()
+    return results

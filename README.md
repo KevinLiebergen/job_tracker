@@ -85,6 +85,12 @@ Run with verbose logging (shows found jobs details):
 python main.py -v
 ```
 
+List last 10 jobs found:
+
+```bash
+python main.py --list
+```
+
 ## 🕰️ Automating with Cron
 
 To run the tracker automatically every day at 9:00 AM, add the following line to your crontab:

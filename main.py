@@ -6,7 +6,7 @@ os.environ['WDM_LOG'] = '0'
 
 from src.crawler import crawl
 from src.notifier import send_new_jobs
-from src.database import init_db
+from src.database import init_db, get_latest_jobs
 
 from parsers.google import GoogleParser
 from parsers.google_deep_mind import GoogleDeepMindParser
@@ -30,8 +30,19 @@ from parsers.datadog import DatadogParser
 
 import logging
 
-def main(keywords, exclude=None, verbose=False):
+def main(keywords, exclude=None, verbose=False, list_jobs=False):
     init_db()
+
+    if list_jobs:
+        jobs = get_latest_jobs()
+        print(f"📋 Last {len(jobs)} jobs found:\n")
+        for job in jobs:
+            title, company, location, link, date = job
+            print(f"🔹 {title} | {company}")
+            print(f"   📍 {location}")
+            print(f"   🔗 {link}")
+            print(f"   📅 {date}\n")
+        return
 
     # Configure logging
     logging.basicConfig(
@@ -95,5 +106,8 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", "-v",
                         action="store_true",
                         help="Enable verbose logging")
+    parser.add_argument("--list", "-l",
+                        action="store_true",
+                        help="List last 10 jobs found")
     args = parser.parse_args()
-    main(args.keywords, args.exclude, args.verbose)
+    main(args.keywords, args.exclude, args.verbose, args.list)
