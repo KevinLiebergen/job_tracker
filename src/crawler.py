@@ -44,6 +44,10 @@ def crawl(parsers, keywords, exclude=None):
                 jobs = parser_obj.parse(url, keywords)
                 if exclude:
                     jobs = [job for job in jobs if not any(ex.lower() in job["title"].lower() for ex in exclude)]
+                
+                for job in jobs:
+                    logger.debug(f"      Job found: {job['title']} ({job['link']})")
+
                 jobs_extended.extend(jobs)
 
             except Exception as e:

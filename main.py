@@ -30,12 +30,12 @@ from parsers.datadog import DatadogParser
 
 import logging
 
-def main(keywords, exclude=None):
+def main(keywords, exclude=None, verbose=False):
     init_db()
 
     # Configure logging
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.DEBUG if verbose else logging.INFO,
         format="%(asctime)s - %(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
@@ -92,5 +92,8 @@ if __name__ == "__main__":
                                  "Director",
                                  "Manager",
                                  "Coordinator"])
+    parser.add_argument("--verbose", "-v",
+                        action="store_true",
+                        help="Enable verbose logging")
     args = parser.parse_args()
-    main(args.keywords, args.exclude)
+    main(args.keywords, args.exclude, args.verbose)
