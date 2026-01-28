@@ -7,23 +7,29 @@ A Python-based tool to track big-tech job listings from various company career p
 To set up the environment, run the following commands:
 
 1. Create the environment:
+
 ```bash
-conda create --name job_tracker python=3.12 
+conda create --name job_tracker python=3.12
 ```
+
 2. Activate the environment:
+
 ```bash
 conda activate job_tracker
 ```
+
 3. Install dependencies:
+
 ```bash
-pip install -r requirements.txt 
+pip install -r requirements.txt
 ```
 
 ## 💾 Saving to database
 
-The results are saved into a SQLite 3 database (`data/jobs.db`), 
-to check if the job found is new or not. 
+The results are saved into a SQLite 3 database (`data/jobs.db`),
+to check if the job found is new or not.
 The database consists of a single table named `jobs` with the following schema:
+
 ```
 +------------------------------------------------------+
 |                     TABLE: jobs                      |
@@ -44,11 +50,11 @@ The database consists of a single table named `jobs` with the following schema:
 +----------------+--------------+----------------------+
 ```
 
-
 ## 🔔 Telegram Notification
 
-To enable Telegram notifications, create a `.env` file in the root directory with your telegram credentials (telegram token and telegram chat id) 
+To enable Telegram notifications, create a `.env` file in the root directory with your telegram credentials (telegram token and telegram chat id)
 and configuration:
+
 ```
 TELEGRAM_TOKEN=000000000:AAAAAAAAAA-BBBBBBBBBBBBBBBBBBBBBBBB
 TELEGRAM_CHAT_ID=-1234567890
@@ -62,30 +68,38 @@ DB_PATH=data/jobs.db
 You can run the script using default keywords defined in the code, or pass specific keywords as arguments.
 
 Basic usage:
+
 ```bash
 python main.py
 ```
+
 Run with specific keywords:
+
 ```bash
 python main.py -k security internship
+```
+
+Run with verbose logging (shows found jobs details):
+
+```bash
+python main.py -v
 ```
 
 ## 🕰️ Automating with Cron
 
 To run the tracker automatically every day at 9:00 AM, add the following line to your crontab:
+
 ```
 0 8,20 * * * /path/to/your/conda/environment/python3 /path/to/job_tracker/main.py
 ```
 
-
 ## ⚙️ Config
-
 
 To track a new company:
 
 1. Create a new python file under the `parsers/` directory (e.g., `parsers/new_company.py`).
 2. Implement a class that contains at least these two methods:
-    * `build_urls()`: Returns the list of URLs to scrape.
-    * `parse()`: Extracts the job data (title, location, link) from the HTML or API response.
+   - `build_urls()`: Returns the list of URLs to scrape.
+   - `parse()`: Extracts the job data (title, location, link) from the HTML or API response.
 3. Add it to the list of parsers in `main.py`
 4. Stay alert for new positions!
