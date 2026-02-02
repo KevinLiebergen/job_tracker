@@ -1,10 +1,5 @@
 from .base_parser import BaseParser
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from src.driver_factory import get_driver
 from bs4 import BeautifulSoup
 import time
 
@@ -18,12 +13,7 @@ class DatadogParser(BaseParser):
 
     def parse(self, url: str, base_keywords: list) -> list:
         # Selenium setup
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = get_driver(headless=True)
         
         try:
             driver.get(url)

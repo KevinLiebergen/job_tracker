@@ -1,7 +1,5 @@
 from .base_parser import BaseParser
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+from src.driver_factory import get_driver
 from bs4 import BeautifulSoup
 import time
 
@@ -18,10 +16,7 @@ class CrowdstrikeParser(BaseParser):
 
     def parse(self, url: str, keywords) -> list:
 
-        options = webdriver.ChromeOptions()
-        options.add_argument('--headless')  # Execution without GUI
-
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = get_driver(headless=True)
 
         driver.get(url)
 
