@@ -5,6 +5,6 @@ class BaseParser:
         """Return a list of URLs to crawl."""
         raise NotImplementedError
 
-    def parse(self, html, keywords):
+    def parse(self, url, keywords, driver=None):
         """Return a list of job dicts extracted from HTML."""
         raise NotImplementedError

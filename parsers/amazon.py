@@ -15,18 +15,25 @@ class AmazonParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords) -> list:
+    def parse(self, url: str, keywords, driver=None) -> list:
 
-        driver = get_driver(headless=True)
+        if not driver:
+            driver = get_driver(headless=True)
+            should_quit = True
+        else:
+            should_quit = False
 
-        driver.get(url)
+        try:
+            driver.get(url)
 
-        # Wait for JavaScript loads everything
-        time.sleep(5)
+            # Wait for JavaScript loads everything
+            time.sleep(5)
 
-        # Extract HTML
-        rendered_html = driver.page_source
-        driver.quit()
+            # Extract HTML
+            rendered_html = driver.page_source
+        finally:
+            if should_quit:
+                driver.quit()
 
         # Send HTML to BeautifulSoup
         soup = BeautifulSoup(rendered_html, 'html.parser')

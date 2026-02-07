@@ -11,9 +11,13 @@ class DatadogParser(BaseParser):
         combined = list(set(keywords + self.SPECIFIC_KEYWORDS))
         return [f"https://careers.datadoghq.com/all-jobs/?s={k.replace(' ', '+')}" for k in combined]
 
-    def parse(self, url: str, base_keywords: list) -> list:
+    def parse(self, url: str, base_keywords: list, driver=None) -> list:
         # Selenium setup
-        driver = get_driver(headless=True)
+        if not driver:
+            driver = get_driver(headless=True)
+            should_quit = True
+        else:
+            should_quit = False
         
         try:
             driver.get(url)
@@ -32,7 +36,8 @@ class DatadogParser(BaseParser):
             
             html = driver.page_source
         finally:
-            driver.quit()
+            if should_quit:
+                driver.quit()
 
         soup = BeautifulSoup(html, 'html.parser')
         jobs = self.parse_jobs(soup)

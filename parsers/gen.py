@@ -14,9 +14,13 @@ class GenParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords) -> list:
+    def parse(self, url: str, keywords, driver=None) -> list:
 
-        driver = get_driver(headless=True)
+        if not driver:
+            driver = get_driver(headless=True)
+            should_quit = True
+        else:
+            should_quit = False
 
         driver.get(url)
 
@@ -25,7 +29,8 @@ class GenParser(BaseParser):
 
         # Extract HTML
         rendered_html = driver.page_source
-        driver.quit()
+        if should_quit:
+            driver.quit()
 
         # Send HTML to BeautifulSoup
         soup = BeautifulSoup(rendered_html, 'html.parser')

@@ -25,7 +25,7 @@ def build_urls(url_config, keywords=None):
     return urls_to_crawl
 
 
-def crawl(parsers, keywords, exclude=None):
+def crawl(parsers, keywords, exclude=None, driver=None):
     new_jobs = []
     jobs_extended = []
 
@@ -41,7 +41,7 @@ def crawl(parsers, keywords, exclude=None):
 
             # Parse the HTML
             try:
-                jobs = parser_obj.parse(url, keywords)
+                jobs = parser_obj.parse(url, keywords, driver=driver)
                 if exclude:
                     jobs = [job for job in jobs if not any(ex.lower() in job["title"].lower() for ex in exclude)]
                 
