@@ -16,13 +16,13 @@ def get_driver(headless=True):
         options_chrome.add_argument('--headless')
 
     try:
-        logger.info("Attempting to initialize Chrome driver...")
+        logger.debug("Attempting to initialize Chrome driver...")
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options_chrome)
-        logger.info("Chrome driver initialized successfully.")
+        logger.debug("Chrome driver initialized successfully.")
         return driver
     except Exception as e:
         logger.warning(f"Failed to initialize Chrome driver: {e}")
-        logger.info("Attempting to initialize Firefox driver as fallback...")
+        logger.debug("Attempting to initialize Firefox driver as fallback...")
 
     # Fallback to Firefox
     options_firefox = webdriver.FirefoxOptions()
@@ -31,7 +31,7 @@ def get_driver(headless=True):
 
     try:
         driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options_firefox)
-        logger.info("Firefox driver initialized successfully.")
+        logger.debug("Firefox driver initialized successfully.")
         return driver
     except Exception as e:
         logger.error(f"Failed to initialize Firefox driver: {e}")

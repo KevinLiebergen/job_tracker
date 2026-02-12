@@ -14,12 +14,8 @@ class MetaParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords, driver=None) -> list:
-        if not driver:
-            driver = get_driver(headless=True)
-            should_quit = True
-        else:
-            should_quit = False
+    def parse(self, url: str, keywords) -> list:
+        driver = self.driver # get_driver(headless=True)
 
         driver.get(url)
 

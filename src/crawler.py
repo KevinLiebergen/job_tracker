@@ -34,19 +34,19 @@ def crawl(parsers, keywords, exclude=None, driver=None):
 
         # Each parser knows how to build the correct URL(s)
         urls = parser_obj.build_urls(keywords)
-        logger.info(f"  → URLs to visit: {urls}")
+        logger.debug(f"  → URLs to visit: {urls}")
 
         for url in urls:
-            logger.info(f"    → Visiting: {url}")
+            logger.debug(f"    → Visiting: {url}")
 
             # Parse the HTML
             try:
                 jobs = parser_obj.parse(url, keywords, driver=driver)
                 if exclude:
                     jobs = [job for job in jobs if not any(ex.lower() in job["title"].lower() for ex in exclude)]
-                
+
                 for job in jobs:
-                    logger.debug(f"      Job found: {job['title']} ({job['link']})")
+                    logger.info(f"      Job found: {job['title']} ({job['link']})")
 
                 jobs_extended.extend(jobs)
 
@@ -56,7 +56,7 @@ def crawl(parsers, keywords, exclude=None, driver=None):
                 send_error(parser_obj.name, str(e))
                 continue
 
-            logger.info(f"    → Parsed {len(jobs)} jobs\n")
+            logger.debug(f"    → Parsed {len(jobs)} jobs\n")
 
         for job in jobs_extended:
             job_id = hash_job(job["title"], job["link"])

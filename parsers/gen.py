@@ -16,11 +16,7 @@ class GenParser(BaseParser):
 
     def parse(self, url: str, keywords, driver=None) -> list:
 
-        if not driver:
-            driver = get_driver(headless=True)
-            should_quit = True
-        else:
-            should_quit = False
+        driver = self.driver # get_driver(headless=True)
 
         driver.get(url)
 
