@@ -24,7 +24,8 @@ class MetaParser(BaseParser):
 
         # Extract HTML
         rendered_html = driver.page_source
-        driver.quit()
+        if should_quit:
+            driver.quit()
 
         # Send HTML to BeautifulSoup
         soup = BeautifulSoup(rendered_html, 'html.parser')

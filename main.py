@@ -7,6 +7,7 @@ os.environ['WDM_LOG'] = '0'
 from src.crawler import crawl
 from src.notifier import send_new_jobs
 from src.database import init_db, get_latest_jobs
+from src.driver_factory import get_driver
 
 from parsers.google import GoogleParser
 from parsers.google_deep_mind import GoogleDeepMindParser
@@ -76,7 +77,19 @@ def main(keywords, exclude=None, verbose=False, list_jobs=False):
         DatadogParser(),
     ]
 
-    new_jobs = crawl(parsers, keywords, exclude)
+    logger.info("🌍 Starting shared browser session...")
+    driver = None
+    try:
+        driver = get_driver(headless=True)
+        new_jobs = crawl(parsers, keywords, exclude, driver=driver)
+    except Exception as e:
+        logger.error(f"❌ Error initializing or using driver: {e}")
+        # potential fallback or raise
+        new_jobs = [] 
+    finally:
+        if driver:
+            logger.info("🛑 Closing shared browser session...")
+            driver.quit()
 
     if new_jobs:
         logger.info(f"📨 Sending {len(new_jobs)} new jobs to Telegram…")

@@ -16,7 +16,7 @@ class NetflixParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords) -> list:
+    def parse(self, url: str, keywords, driver=None) -> list:
 
         driver = self.driver # get_driver(headless=True)
 
@@ -27,7 +27,8 @@ class NetflixParser(BaseParser):
 
         # Extract HTML
         rendered_html = driver.page_source
-        driver.quit()
+        if should_quit:
+            driver.quit()
 
         # Send HTML to BeautifulSoup
         soup = BeautifulSoup(rendered_html, 'html.parser')

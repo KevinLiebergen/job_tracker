@@ -93,7 +93,7 @@ python main.py --list
 
 ## 🕰️ Automating with Cron
 
-To run the tracker automatically every day at 9:00 AM, add the following line to your crontab:
+To run the tracker automatically every day at 8:00 AM and 20:00 PM, add the following line to your crontab:
 
 ```
 0 8,20 * * * /path/to/your/conda/environment/python3 /path/to/job_tracker/main.py

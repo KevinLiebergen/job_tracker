@@ -8,7 +8,7 @@ class CensysParser(BaseParser):
     def build_urls(self, keywords):
         return ["https://boards-api.greenhouse.io/v1/boards/censys/jobs/"]
 
-    def parse(self, url: str, keywords: list) -> list:
+    def parse(self, url: str, keywords: list, driver=None) -> list:
 
         response = requests.get(url)
         all_jobs = response.json().get('jobs', [])
