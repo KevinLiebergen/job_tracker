@@ -1,5 +1,8 @@
+from src.driver_factory import get_driver
+
 class BaseParser:
     name = "base"
+    driver = get_driver()
 
     def build_urls(self, keywords):
         """Return a list of URLs to crawl."""

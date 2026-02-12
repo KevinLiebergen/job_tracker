@@ -17,7 +17,7 @@ class AmazonParser(BaseParser):
 
     def parse(self, url: str, keywords) -> list:
 
-        driver = get_driver(headless=True)
+        driver = self.driver #get_driver(headless=True)
 
         driver.get(url)
 

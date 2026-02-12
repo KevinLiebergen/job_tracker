@@ -23,7 +23,7 @@ class CiscoParser(BaseParser):
 
         only_scripts = SoupStrainer("script")
 
-        driver = get_driver(headless=True)
+        driver = self.driver # get_driver(headless=True)
 
         driver.get(url)
 

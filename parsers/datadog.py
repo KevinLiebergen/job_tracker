@@ -13,8 +13,8 @@ class DatadogParser(BaseParser):
 
     def parse(self, url: str, base_keywords: list) -> list:
         # Selenium setup
-        driver = get_driver(headless=True)
-        
+        driver = self.driver # get_driver(headless=True)
+
         try:
             driver.get(url)
             # Wait for hits to load
