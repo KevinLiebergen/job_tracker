@@ -15,7 +15,16 @@ def get_driver(headless=True):
     if headless:
         options_chrome.add_argument('--headless')
 
+    # Enable performance logging to capture network traffic (for status codes)
+    # Try both standard capability and experimental option
+    prefs = {'performance': 'ALL'}
+    options_chrome.set_capability('goog:loggingPrefs', prefs)
+    
+    # Sometimes this helps ensuring network logs are enabled
+    options_chrome.add_experimental_option('perfLoggingPrefs', {'enableNetwork': True})
+
     try:
+        logger.debug(f"Chrome Options Capabilities: {options_chrome.to_capabilities()}")
         logger.debug("Attempting to initialize Chrome driver...")
         driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options_chrome)
         logger.debug("Chrome driver initialized successfully.")

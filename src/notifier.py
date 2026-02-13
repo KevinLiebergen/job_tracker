@@ -32,6 +32,18 @@ def send_error(parser_name, error_message):
     except Exception as ex:
         return
 
+def send_blocking_alert(parser_name, url, reason):
+    message = (
+        f"⚠️ *Blocking Detected* ⚠️\n\n"
+        f"⚙️ *Parser:* {parser_name}\n"
+        f"🔗 *URL:* {url}\n"
+        f"❌ *Reason:* `{reason}`"
+    )
+    try:
+        asyncio.run(send_telegram_async(message))
+    except Exception as ex:
+        logger.error(f"Failed to send blocking alert: {ex}")
+
 async def send_telegram_async(message):
     bot = Bot(token=TELEGRAM_TOKEN)
     await bot.send_message(chat_id=TELEGRAM_CHAT_ID,

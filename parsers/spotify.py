@@ -21,6 +21,13 @@ class SpotifyParser(BaseParser):
 
         driver.get(url)
 
+        # Check for blocking
+        from src.utils import check_page_status
+        from src.notifier import send_blocking_alert
+        blocking_reason = check_page_status(driver, url)
+        if blocking_reason:
+            send_blocking_alert(self.name, url, blocking_reason)
+
         # Wait for JavaScript loads everything
         time.sleep(5)
 
