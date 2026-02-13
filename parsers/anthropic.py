@@ -8,7 +8,7 @@ class AnthropicParser(BaseParser):
     def build_urls(self, keywords):
         return ["https://boards-api.greenhouse.io/v1/boards/anthropic/jobs/"]
 
-    def parse(self, url: str, base_keywords: list, driver=None) -> list:
+    def parse(self, url: str, base_keywords: list, driver=None, should_quit=False) -> list:
         response = requests.get(url)
         all_jobs = response.json().get('jobs', [])
 

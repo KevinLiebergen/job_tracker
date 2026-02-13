@@ -11,9 +11,12 @@ class DatadogParser(BaseParser):
         combined = list(set(keywords + self.SPECIFIC_KEYWORDS))
         return [f"https://careers.datadoghq.com/all-jobs/?s={k.replace(' ', '+')}" for k in combined]
 
-    def parse(self, url: str, base_keywords: list, driver=None) -> list:
+    def parse(self, url: str, base_keywords: list, driver=None, should_quit=False) -> list:
         # Selenium setup
-        driver = self.driver # get_driver(headless=True)
+        if driver:
+            self._driver = driver
+        
+        driver = self.driver
 
         try:
             driver.get(url)
@@ -27,6 +30,9 @@ class DatadogParser(BaseParser):
 
             # Wait for hits to load
             try:
+                from selenium.webdriver.support.ui import WebDriverWait
+                from selenium.webdriver.support import expected_conditions as EC
+                from selenium.webdriver.common.by import By
                 # Wait for at least one job card or specific container
                 WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "ais-Hits-item"))
@@ -38,12 +44,12 @@ class DatadogParser(BaseParser):
             # Additional small sleep to ensure rendering is stable
             time.sleep(2)
             
-            html = driver.page_source
+            html_content = driver.page_source
         finally:
             if should_quit:
                 driver.quit()
 
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html_content, 'html.parser')
         jobs = self.parse_jobs(soup)
         return jobs
 

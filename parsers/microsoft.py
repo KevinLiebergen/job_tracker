@@ -15,15 +15,18 @@ class MicrosoftParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords, driver=None) -> list:
-
-        driver = self.driver # get_driver(headless=True)
+    def parse(self, url: str, keywords, driver=None, should_quit=False) -> list:
+        if driver:
+            self._driver = driver
+        
+        driver = self.driver
 
         driver.get(url)
 
-        # Check for blocking
+        # Check for blocking or non-200 status
         from src.utils import check_page_status
         from src.notifier import send_blocking_alert
+        
         blocking_reason = check_page_status(driver, url)
         if blocking_reason:
             send_blocking_alert(self.name, url, blocking_reason)

@@ -19,23 +19,26 @@ class CiscoParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords, driver=None) -> list:
-
+    def parse(self, url: str, keywords, driver=None, should_quit=False) -> list:
+        if driver:
+            self._driver = driver
+        
         only_scripts = SoupStrainer("script")
 
         driver = self.driver # get_driver(headless=True)
 
         driver.get(url)
 
-        # Check for blocking
+        # Check for blocking or non-200 status
         from src.utils import check_page_status
         from src.notifier import send_blocking_alert
+        
         blocking_reason = check_page_status(driver, url)
         if blocking_reason:
             send_blocking_alert(self.name, url, blocking_reason)
 
         # Wait for JavaScript loads everything
-        time.sleep(5)
+        time.sleep(10)
 
         # Extract HTML
         rendered_html = driver.page_source

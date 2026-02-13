@@ -41,7 +41,7 @@ def crawl(parsers, keywords, exclude=None, driver=None):
 
             # Parse the HTML
             try:
-                jobs = parser_obj.parse(url, keywords, driver=driver)
+                jobs = parser_obj.parse(url, keywords, driver=driver, should_quit=False)
                 if exclude:
                     jobs = [job for job in jobs if not any(ex.lower() in job["title"].lower() for ex in exclude)]
 

@@ -14,7 +14,7 @@ class GoogleDeepMindParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords: list, driver=None) -> list:
+    def parse(self, url: str, keywords: list, driver=None, should_quit=False) -> list:
 
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")

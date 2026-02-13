@@ -14,7 +14,7 @@ class GoogleParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords, driver=None) -> list:
+    def parse(self, url: str, keywords, driver=None, should_quit=False) -> list:
         # List to hold the extracted job data
         r = requests.get(url, headers=HEADERS, timeout=10)
         soup = BeautifulSoup(r.text, "html.parser")

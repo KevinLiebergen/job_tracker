@@ -16,9 +16,11 @@ class NetflixParser(BaseParser):
             urls.append(base + kw.replace(" ", "+"))
         return urls
 
-    def parse(self, url: str, keywords, driver=None) -> list:
-
-        driver = self.driver # get_driver(headless=True)
+    def parse(self, url: str, keywords, driver=None, should_quit=False) -> list:
+        if driver:
+            self._driver = driver
+        
+        driver = self.driver
 
         driver.get(url)
 
