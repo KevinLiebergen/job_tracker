@@ -68,6 +68,8 @@ class GenParser(BaseParser):
             # --- Link ---
             # Workday links are relative, so we prepend the base domain found in the file
             relative_link = title_tag.get('href')
+            if '?' in relative_link:
+                relative_link = relative_link.split('?')[0]
             link = f"https://gen.wd5.myworkdayjobs.com{relative_link}"
 
             location = self.parse_locations(title_tag)
