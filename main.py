@@ -27,6 +27,7 @@ from parsers.spotify import SpotifyParser
 from parsers.cisco import CiscoParser
 from parsers.anthropic import AnthropicParser
 from parsers.datadog import DatadogParser
+from parsers.ats import load_ats_parsers
 
 
 import logging
@@ -76,6 +77,9 @@ def main(keywords, exclude=None, verbose=False, list_jobs=False):
         AnthropicParser(),
         DatadogParser(),
     ]
+
+    # Companies on a standard ATS come from config/companies.py
+    parsers.extend(load_ats_parsers())
 
     logger.info("🌍 Starting shared browser session...")
     driver = None

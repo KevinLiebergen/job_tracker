@@ -27,10 +27,10 @@ def build_urls(url_config, keywords=None):
 
 def crawl(parsers, keywords, exclude=None, driver=None):
     new_jobs = []
-    jobs_extended = []
 
     for parser_obj in parsers:
         logger.info(f"📌 Running parser: {parser_obj.name}")
+        jobs_extended = []
 
         # Each parser knows how to build the correct URL(s)
         urls = parser_obj.build_urls(keywords)

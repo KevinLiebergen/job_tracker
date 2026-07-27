@@ -101,7 +101,36 @@ To run the tracker automatically every day at 8:00 AM and 20:00 PM, add the foll
 
 ## ⚙️ Config
 
-To track a new company:
+### Companies on a standard ATS
+
+Most companies publish their openings through an applicant tracking system that exposes
+a public JSON API. Those don't need a parser — add one entry to the `COMPANIES` list in
+`config/companies.py`:
+
+```python
+{"name": "Dragos", "ats": "greenhouse", "token": "dragos"},
+```
+
+Supported values for `ats` are `greenhouse`, `lever`, `ashby`, `smartrecruiters`,
+`workable`, `recruitee`, `personio`, `comeet` and `workday`. `token` is the board
+identifier that appears in the company's careers URL (e.g. `jobs.lever.co/<token>`).
+Workday additionally needs `wd` and `site`; Comeet needs `company`.
+
+Check your edit with:
+
+```bash
+python tests/check_ats_config.py          # structure only, no network
+python tests/check_ats_config.py --live   # also fetches every board
+```
+
+These entries are turned into parsers at runtime by `parsers/ats.py`. Because the APIs
+return the whole board at once, they are fetched with `requests` and need no browser.
+
+Companies whose careers site is not on a supported ATS are listed in
+[`docs/companies_without_ats.md`](docs/companies_without_ats.md); those need a custom
+parser as described below.
+
+### Companies needing a custom parser
 
 1. Create a new python file under the `parsers/` directory (e.g., `parsers/new_company.py`).
 2. Implement a class that contains at least these two methods:
