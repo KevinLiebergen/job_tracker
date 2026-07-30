@@ -32,11 +32,11 @@ from parsers.ats import load_ats_parsers
 
 import logging
 
-def main(keywords, exclude=None, verbose=False, list_jobs=False):
+def main(keywords, exclude=None, verbose=False, list_jobs=None, company=None, location=None):
     init_db()
 
     if list_jobs:
-        jobs = get_latest_jobs()
+        jobs = get_latest_jobs(list_jobs, company, location)
         print(f"📋 Last {len(jobs)} jobs found:\n")
         for job in jobs:
             title, company, location, link, date = job
@@ -55,7 +55,7 @@ def main(keywords, exclude=None, verbose=False, list_jobs=False):
     logger = logging.getLogger(__name__)
 
     # Silence httpx logger
-    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpx").setLevel(logging.INFO)
 
     parsers = [
         GoogleParser(),
@@ -119,12 +119,20 @@ if __name__ == "__main__":
                                  "Sr.",
                                  "Director",
                                  "Manager",
+                                 "Staff",
+                                 "Lead",
                                  "Coordinator"])
     parser.add_argument("--verbose", "-v",
                         action="store_true",
                         help="Enable verbose logging")
     parser.add_argument("--list", "-l",
-                        action="store_true",
-                        help="List last 10 jobs found")
+                        default=None,
+                        help="List last n jobs found (default=10)")
+    parser.add_argument("--location", "-L",
+                        default=None,
+                        help="List jobs of this location (default=None)")
+    parser.add_argument("--company", "-c",
+                        default=None,
+                        help="List jobs of this company (default=None)")
     args = parser.parse_args()
-    main(args.keywords, args.exclude, args.verbose, args.list)
+    main(args.keywords, args.exclude, args.verbose, args.list, args.company, args.location)

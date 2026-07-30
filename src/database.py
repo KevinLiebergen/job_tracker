@@ -47,15 +47,30 @@ def save_job(job_id, job):
     conn.close()
 
 
-def get_latest_jobs(limit=10):
+def get_latest_jobs(limit=10, company=None, location=None):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    c.execute("""
-        SELECT title, company, location, link, date_added 
-        FROM jobs 
-        ORDER BY rowid DESC 
+    ucompany = f"%{str(company)}%" if company else None
+    ulocation = f"%{str(location)}%" if location else None
+    query_data = (limit,)
+    query = f"""
+        SELECT title, company, location, link, date_added
+        FROM jobs
+    """
+    if company and location:
+        query += """ WHERE company LIKE ? AND location LIKE ?  """
+        query_data = (ucompany, ulocation, limit)
+    elif company:
+        query += """ WHERE company LIKE ?  """
+        query_data = (ucompany, limit)
+    elif location:
+        query += """ WHERE location LIKE ?  """
+        query_data = (ulocation, limit)
+    query += """
+        ORDER BY rowid DESC
         LIMIT ?
-    """, (limit,))
+    """
+    c.execute(query, query_data)
     results = c.fetchall()
     conn.close()
     return results
