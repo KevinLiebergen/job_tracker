@@ -77,6 +77,7 @@ fully custom careers site. Each would need its own parser in parsers/.
 | Red Canary | https://redcanary.com/careers/ | — |
 | Red Siege | https://redsiege.com/careers | — |
 | RevEng.AI | https://reveng.ai/careers | — |
+| Revolut | https://www.revolut.com/careers/ | — (behind Cloudflare managed challenge) |
 | Rhino Security Labs | https://rhinosecuritylabs.com/careers/ | — |
 | Scythe | https://scythe.io/careers | — |
 | SecPod | https://www.secpod.com/careers | — |
