@@ -10,11 +10,37 @@ from config.companies import COMPANIES
 from config.settings import HEADERS
 import logging
 import requests
+import time
 import xml.etree.ElementTree as ET
 
 logger = logging.getLogger(__name__)
 
 TIMEOUT = 20
+RETRIES = 4
+BACKOFF = 3  # seconds; doubled after each failed attempt
+
+
+def request_json(method, url, **kwargs):
+    """requests.<method> returning parsed JSON, retrying transient failures.
+
+    Workday (and others) answer with 429/5xx or an HTML error page when they throttle
+    a client, which surfaces as 'Expecting value: line 1 column 1'. Those are retried
+    with exponential backoff; other 4xx errors fail immediately.
+    """
+    last = None
+    for attempt in range(RETRIES):
+        if attempt:
+            time.sleep(BACKOFF * 2 ** (attempt - 1))
+        try:
+            response = requests.request(method, url, timeout=TIMEOUT, **kwargs)
+            if response.status_code == 429 or response.status_code >= 500:
+                last = requests.HTTPError(f"{response.status_code} for {url}")
+                continue
+            response.raise_for_status()
+            return response.json()
+        except (requests.ConnectionError, requests.Timeout, ValueError) as e:
+            last = e
+    raise last
 
 
 class AtsParser(BaseParser):
@@ -39,9 +65,7 @@ class AtsParser(BaseParser):
     def fetch(self, url, keywords=None):
         # Most boards return every posting in one response, so keywords are unused
         # here and applied by parse(). WorkdayParser overrides this.
-        response = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
-        response.raise_for_status()
-        return response.json()
+        return request_json("GET", url, headers=HEADERS)
 
     def extract(self, payload):
         """Return a list of (title, location, link) tuples."""
@@ -228,6 +252,7 @@ class WorkdayParser(AtsParser):
     ats = "workday"
     PAGE_SIZE = 20
     MAX_PAGES = 10
+    PAGE_DELAY = 1  # seconds between requests, to stay under Workday's throttling
 
     @property
     def host(self):
@@ -252,16 +277,15 @@ class WorkdayParser(AtsParser):
         for term in (keywords or [""]):
             fetched, total = 0, None
             for page in range(self.MAX_PAGES):
-                response = requests.post(
-                    url,
+                if page or postings:
+                    time.sleep(self.PAGE_DELAY)
+                payload = request_json(
+                    "POST", url,
                     headers={**HEADERS, "Content-Type": "application/json",
                              "Accept": "application/json"},
                     json={"appliedFacets": {}, "limit": self.PAGE_SIZE,
                           "offset": page * self.PAGE_SIZE, "searchText": term},
-                    timeout=TIMEOUT,
                 )
-                response.raise_for_status()
-                payload = response.json()
 
                 # Only the first page reports the result count; later pages send total=0.
                 if total is None:
