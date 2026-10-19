@@ -29,7 +29,6 @@ COMPANIES = [
      "token": "darktrace", "site": "DarktaceExternal", "wd": "wd3"},
     {"name": "Chainalysis", "ats": "ashby", "token": "chainalysis-careers"},
     {"name": "CloudSEK", "ats": "greenhouse", "token": "cloudsek"},
-    {"name": "Cybereason", "ats": "greenhouse", "token": "cybereason"},
     {"name": "Deutsche Bank", "ats": "workday",
      "token": "db", "site": "DBWebsite", "wd": "wd3"},
     {"name": "Dragos", "ats": "greenhouse", "token": "dragos"},
