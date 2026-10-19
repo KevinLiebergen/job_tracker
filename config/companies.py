@@ -7,10 +7,11 @@ docs/companies_without_ats.md for the ones that were skipped.
 
     name   company shown in the Telegram notification
     ats    greenhouse | lever | ashby | smartrecruiters | workable | recruitee
-           | personio | comeet | workday
+           | personio | comeet | workday | dayforce
     token  the board identifier used by that ATS
 
-Workday entries also need "wd" (datacenter) and "site"; Comeet needs "company".
+Workday entries also need "wd" (datacenter) and "site"; Comeet needs "company";
+Dayforce takes the client namespace as token and the job board code as "site".
 """
 
 COMPANIES = [
@@ -43,6 +44,7 @@ COMPANIES = [
     {"name": "Juniper (HPE)", "ats": "workday",
      "token": "hpe", "site": "Jobsathpe", "wd": "wd5"},
     {"name": "KnowBe4", "ats": "greenhouse", "token": "knowbe4"},
+    {"name": "LevelBlue", "ats": "dayforce", "token": "twh", "site": "CANDIDATEPORTAL"},
     {"name": "Magnet Forensics", "ats": "lever", "token": "magnetforensics"},
     {"name": "McAfee", "ats": "greenhouse", "token": "mcafee"},
     {"name": "Menlo Security", "ats": "ashby", "token": "menlosecurity"},

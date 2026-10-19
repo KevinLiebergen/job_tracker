@@ -313,9 +313,60 @@ class WorkdayParser(AtsParser):
         return jobs
 
 
+class DayforceParser(AtsParser):
+    """Dayforce candidate portals: a Next.js app whose search API wants a CSRF token.
+
+    The token is the client namespace ('twh' in jobs.dayforcehcm.com/twh/CANDIDATEPORTAL)
+    and "site" is the job board code. The API rejects POSTs without the next-auth CSRF
+    token echoed back in X-CSRF-TOKEN, so each fetch opens a session first.
+    """
+
+    ats = "dayforce"
+    BASE = "https://jobs.dayforcehcm.com"
+    PAGE_SIZE = 25
+    MAX_PAGES = 20
+
+    @property
+    def site(self):
+        return self.extra.get("site", "CANDIDATEPORTAL")
+
+    def api_url(self):
+        return f"{self.BASE}/api/geo/{self.token}/jobposting/search"
+
+    def fetch(self, url, keywords=None):
+        portal = f"{self.BASE}/{self.token}/{self.site}"
+        session = requests.Session()
+        session.headers.update(HEADERS)
+        session.get(portal, timeout=TIMEOUT)
+        csrf = session.get(f"{self.BASE}/api/auth/csrf", timeout=TIMEOUT).json()["csrfToken"]
+        headers = {"Origin": self.BASE, "Referer": portal, "Accept": "application/json",
+                   "X-CSRF-TOKEN": csrf}
+
+        postings = []
+        for page in range(self.MAX_PAGES):
+            payload = request_json(
+                "POST", url, headers=headers, cookies=session.cookies,
+                json={"clientNamespace": self.token, "jobBoardCode": self.site,
+                      "cultureCode": "en-US", "paginationStart": page * self.PAGE_SIZE},
+            )
+            batch = payload.get("jobPostings", [])
+            postings.extend(batch)
+            if len(batch) < self.PAGE_SIZE or len(postings) >= payload.get("maxCount", 0):
+                break
+        return postings
+
+    def extract(self, payload):
+        jobs = []
+        for job in payload:
+            locations = [loc.get("formattedAddress") for loc in job.get("postingLocations") or []]
+            link = f"{self.BASE}/en-US/{self.token}/{self.site}/jobs/{job.get('jobPostingId')}"
+            jobs.append((job.get("jobTitle"), self.join_location(*locations), link))
+        return jobs
+
+
 PARSERS_BY_ATS = {cls.ats: cls for cls in (
     GreenhouseParser, LeverParser, AshbyParser, SmartRecruitersParser, WorkableParser,
-    RecruiteeParser, PersonioParser, ComeetParser, WorkdayParser,
+    RecruiteeParser, PersonioParser, ComeetParser, WorkdayParser, DayforceParser,
 )}
 
 
